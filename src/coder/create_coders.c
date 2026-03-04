@@ -6,11 +6,11 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 10:12:22 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/04 10:57:17 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/03/04 12:03:41 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "unistd.h"
+#include "stdlib.h"
 #include "coder.h"
 
 void	fill_coder(t_coder *coder, int index)
@@ -35,5 +35,5 @@ t_coder	*create_coders(int number)
 		fill_coder(&(array[i]), i);
 		i++;
 	}
-	return array;
+	return (array);
 }

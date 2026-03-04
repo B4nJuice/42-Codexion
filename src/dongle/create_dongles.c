@@ -6,11 +6,11 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 11:21:55 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/04 11:24:07 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/03/04 12:03:37 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "unistd.h"
+#include "stdlib.h"
 #include "dongle.h"
 
 void	fill_dongle(t_dongle *dongle)
@@ -33,5 +33,5 @@ t_dongle	*create_dongles(int number)
 		fill_dongle(&(array[i]));
 		i++;
 	}
-	return array;
+	return (array);
 }

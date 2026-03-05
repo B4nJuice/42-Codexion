@@ -1,37 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_dongles.c                                   :+:      :+:    :+:   */
+/*   timestamp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/04 11:21:55 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/04 12:12:44 by lgirard          ###   ########lyon.fr   */
+/*   Created: 2026/03/04 12:27:29 by lgirard           #+#    #+#             */
+/*   Updated: 2026/03/04 12:41:03 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "stdlib.h"
-#include "dongle.h"
+#include <stdio.h>
+#include <sys/time.h>
 
-void	fill_dongle(t_dongle *dongle)
+void	start_timestamp(void);
+
+int	get_timestamp(void)
 {
-	dongle->taken = 0;
-	dongle->last_time_taken = 0;
-}
+	struct timeval		tv;
+	struct timezone		tz;
+	int					ms_time;
 
-t_dongle	*create_dongles(int number)
-{
-	t_dongle	*array;
-	int			i;
-
-	array = malloc(number * sizeof(t_dongle));
-	if (!array)
-		return (NULL);
-	i = 0;
-	while (i < number)
-	{
-		fill_dongle(&(array[i]));
-		i++;
-	}
-	return (array);
+	ms_time = gettimeofday(&tv, &tz);
 }

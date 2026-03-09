@@ -1,30 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   destroy_dongles.c                                  :+:      :+:    :+:   */
+/*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/09 13:30:00 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/09 13:39:33 by lgirard          ###   ########lyon.fr   */
+/*   Created: 2026/03/09 18:14:22 by lgirard           #+#    #+#             */
+/*   Updated: 2026/03/09 18:15:10 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <pthread.h>
-#include <stdlib.h>
-#include "dongle.h"
+#ifndef UTILS_H
+# define UTILS_H
 
-void	destroy_dongles(t_dongle *dongles, int number)
-{
-	int	i;
+void	start_timestamp(void);
+int		get_timestamp(void);
 
-	if (!dongles)
-		return ;
-	i = 0;
-	while (i < number)
-	{
-		pthread_mutex_destroy(&dongles[i].mutex);
-		i++;
-	}
-	free(dongles);
-}
+#endif

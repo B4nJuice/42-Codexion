@@ -1,46 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   coder.h                                            :+:      :+:    :+:   */
+/*   release_dongles.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/04 10:12:43 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/09 18:12:54 by lgirard          ###   ########lyon.fr   */
+/*   Created: 2026/03/09 13:35:00 by lgirard           #+#    #+#             */
+/*   Updated: 2026/03/09 18:12:22 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CODER_H
-# define CODER_H
+#include <pthread.h>
+#include "coder.h"
+#include "dongle.h"
 
-# include "dongle.h"
-
-typedef enum e_coder_state
-{
-	IDLE,
-	COMPILING,
-	DEBUGGING,
-	REFACTORING,
-	BURNED_OUT
-}	t_coder_state;
-
-typedef enum e_coder_first_check
-{
-	LEFT,
-	RIGHT
-}	t_coder_first_check;
-
-typedef struct s_coder
-{
-	int					index;
-	int					left_hand;
-	int					right_hand;
-	t_coder_state		state;
-	t_coder_first_check	first_check;
-}	t_coder;
-
-t_coder	*create_coders(int number);
 void	release_dongles(t_coder *coder, t_dongle *dongle_array,
-			int dongle_number);
+	int dongle_number)
+{
+	t_dongle	*left_dongle;
+	t_dongle	*right_dongle;
 
-#endif
+	left_dongle = get_dongle(coder->index, dongle_array, dongle_number);
+	right_dongle = get_dongle(coder->index + 1, dongle_array, dongle_number);
+	left_dongle->taken = 0;
+	right_dongle->taken = 0;
+	coder->left_hand = 0;
+	coder->right_hand = 0;
+	pthread_mutex_unlock(&left_dongle->mutex);
+	pthread_mutex_unlock(&right_dongle->mutex);
+}

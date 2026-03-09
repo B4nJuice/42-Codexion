@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 10:12:43 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/04 12:04:22 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/03/09 13:10:34 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,19 @@ typedef enum e_coder_state
 	BURNED_OUT
 }	t_coder_state;
 
+typedef enum e_coder_first_check
+{
+	LEFT,
+	RIGHT
+}	t_coder_first_check;
+
 typedef struct s_coder
 {
-	int				index;
-	int				left_hand;
-	int				right_hand;
-	t_coder_state	state;
+	int					index;
+	int					left_hand;
+	int					right_hand;
+	t_coder_state		state;
+	t_coder_first_check	first_check;
 }	t_coder;
 
 t_coder	*create_coders(int number);

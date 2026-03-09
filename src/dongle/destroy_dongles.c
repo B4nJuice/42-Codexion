@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dongle.h                                           :+:      :+:    :+:   */
+/*   destroy_dongles.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/04 10:17:45 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/09 13:37:20 by lgirard          ###   ########lyon.fr   */
+/*   Created: 2026/03/09 13:30:00 by lgirard           #+#    #+#             */
+/*   Updated: 2026/03/09 13:37:18 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DONGLE_H
-# define DONGLE_H
+#include <pthread.h>
+#include <stdlib.h>
+#include "dongle.h"
 
-# include <pthread.h>
-
-typedef struct s_dongle
+void	destroy_dongles(t_dongle *dongles, int number)
 {
-	int				taken;
-	int				last_time_taken;
-	pthread_mutex_t	mutex;
-}	t_dongle;
+	int	i;
 
-t_dongle	*create_dongles(int number);
-void		destroy_dongles(t_dongle *dongles, int number);
-t_dongle	*get_dongle(int index, t_dongle *dongle_array, int dongle_number);
-
-#endif
+	if (!dongles)
+		return ;
+	i = 0;
+	while (i < number)
+	{
+		pthread_mutex_destroy(&dongles[i].mutex);
+		i++;
+	}
+	free(dongles);
+}

@@ -1,19 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_dongle.c                                       :+:      :+:    :+:   */
+/*   log.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/04 12:10:08 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/10 10:11:49 by lgirard          ###   ########lyon.fr   */
+/*   Created: 2026/03/10 09:24:57 by lgirard           #+#    #+#             */
+/*   Updated: 2026/03/10 10:12:17 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "dongle.h"
+#include <stdio.h>
+#include "utils.h"
+#include "coder.h"
 
-t_dongle	*get_dongle(int index, t_dongle *dongle_array, int dongle_number)
+void	codexion_log(t_coder coder, const char *description)
 {
-	index = index % dongle_number;
-	return (&(dongle_array[index]));
+	int	time;
+
+	time = get_timestamp();
+	printf("%d %d %s\n", time, coder.index + 1, description);
 }

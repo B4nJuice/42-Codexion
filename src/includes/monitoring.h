@@ -1,32 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   log.c                                              :+:      :+:    :+:   */
+/*   monitoring.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/10 09:24:57 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/11 09:42:22 by lgirard          ###   ########lyon.fr   */
+/*   Created: 2026/03/11 09:15:16 by lgirard           #+#    #+#             */
+/*   Updated: 2026/03/11 09:29:07 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <string.h>
-#include "utils.h"
-#include "coder.h"
+#ifndef MONITORING_H
+# define MONITORING_H
+# include "coder.h"
 
-void	codexion_log(t_coder coder, const char *description)
+typedef struct s_monitoring_args
 {
-	static int	stop = 0;
-	int			time;
+	t_coder		**coders;
+	t_params	params;
+}	t_monitoring_args;
 
-	if (strcmp(description, "stop"))
-		stop = 1;
-	if (!stop)
-	{
-		time = get_timestamp();
-		printf("%d %d %s\n", time, coder.index + 1, description);
-	}
-	if (strcmp(description, "burned out"))
-		stop = 1;
-}
+#endif

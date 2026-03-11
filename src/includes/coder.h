@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 10:12:43 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/11 09:44:18 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 10:18:34 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_thread_args
 	t_coder		*coder;
 	t_dongle	*dongles;
 	t_params	params;
+	int			*stop;
 }	t_thread_args;
 
 t_coder	*create_coders(int number);

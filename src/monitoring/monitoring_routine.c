@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 09:13:32 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/11 09:56:16 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 10:19:30 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ void	*monitoring_routine(void *arg)
 	params = args->params;
 	coders = args->coders;
 	i = 0;
-	while (i >= 0)
+	while (!args->stop)
 	{
 		while (coders[i])
 		{
 			if (is_burned_out(coders[i], params.burnout_time) || \
 is_compilation_satisfied(coders, params.required_compile))
 			{
-				i = -1;
+				args->stop = 1;
 				break ;
 			}
 			i++;

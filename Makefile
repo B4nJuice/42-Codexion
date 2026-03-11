@@ -14,10 +14,14 @@ CODEXION_UTILS_DIR	= src/utils/
 CODEXION_UTILS		= log.c \
 					timestamp.c
 
+CODEXION_MONITORING_DIR	= src/monitoring/
+CODEXION_MONITORING		= monitoring_routine.c
+
 SRCS				= codexion.c \
 					$(addprefix $(CODEXION_CODER_DIR), $(CODEXION_CODER)) \
 					$(addprefix $(CODEXION_DONGLE_DIR), $(CODEXION_DONGLE)) \
-					$(addprefix $(CODEXION_UTILS_DIR), $(CODEXION_UTILS))
+					$(addprefix $(CODEXION_UTILS_DIR), $(CODEXION_UTILS)) \
+					$(addprefix $(CODEXION_MONITORING_DIR), $(CODEXION_MONITORING))
 
 OBJS_DIR			= .objects
 OBJS				= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
@@ -29,15 +33,13 @@ CFLAGS				= -Wall -Wextra -Werror
 IFLAGS				= -I $(INCLUDES_DIR)
 LFLAGS				= -pthread
 
-.PHONY: all clean fclean re
-
 all: $(NAME)
 
 $(NAME): $(OBJS_DIR) $(OBJS)
 	$(CC) $(OBJS) $(LFLAGS) -o $(NAME)
 
 $(OBJS_DIR):
-	mkdir -p $(OBJS_DIR)/src/coder $(OBJS_DIR)/src/dongle $(OBJS_DIR)/src/utils
+	mkdir -p $(OBJS_DIR)/src/coder $(OBJS_DIR)/src/dongle $(OBJS_DIR)/src/utils $(OBJS_DIR)/src/monitoring
 
 $(OBJS_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
@@ -49,3 +51,5 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+.PHONY: all clean fclean re

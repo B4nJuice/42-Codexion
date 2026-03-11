@@ -6,13 +6,16 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 09:13:32 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/11 10:19:30 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 15:29:29 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coder.h"
 #include "utils.h"
 #include "monitoring.h"
+
+int	is_burned_out(t_coder *coder, int burnout_time);
+int	is_compilation_satisfied(t_coder **coders, int required_compile);
 
 void	*monitoring_routine(void *arg)
 {
@@ -32,12 +35,13 @@ void	*monitoring_routine(void *arg)
 			if (is_burned_out(coders[i], params.burnout_time) || \
 is_compilation_satisfied(coders, params.required_compile))
 			{
-				args->stop = 1;
+				*(args->stop) = 1;
 				break ;
 			}
 			i++;
 		}
 	}
+	return (NULL);
 }
 
 int	is_compilation_satisfied(t_coder **coders, int required_compile)

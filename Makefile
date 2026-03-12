@@ -12,7 +12,8 @@ CODEXION_DONGLE		= create_dongles.c \
 
 CODEXION_UTILS_DIR	= src/utils/
 CODEXION_UTILS		= log.c \
-					timestamp.c
+					timestamp.c \
+					fill_params.c
 
 CODEXION_MONITORING_DIR	= src/monitoring/
 CODEXION_MONITORING		= monitoring_routine.c

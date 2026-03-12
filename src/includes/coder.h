@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 10:12:43 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/11 10:18:34 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/03/12 09:41:43 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,13 @@ typedef struct s_coder
 typedef struct s_params
 {
 	int			dongle_number;
+	int			burnout_time;
 	int			compiling_time;
 	int			debugging_time;
 	int			refactoring_time;
-	int			burnout_time;
 	int			required_compile;
+	int			dongle_cooldown;
+	const char	*scheduler;
 }	t_params;
 
 typedef struct s_thread_args

@@ -1,38 +1,38 @@
-NAME			= codexion
+NAME					= codexion
 
-CODEXION_CODER_DIR	= src/coder/
-CODEXION_CODER		= create_coders.c \
-					release_dongles.c \
-					take_dongles.c
+CODEXION_CODER_DIR		= src/coder/
+CODEXION_CODER			= create_coders.c \
+						release_dongles.c \
+						take_dongles.c
 
-CODEXION_DONGLE_DIR	= src/dongle/
-CODEXION_DONGLE		= create_dongles.c \
-					destroy_dongles.c \
-					get_dongle.c
+CODEXION_DONGLE_DIR		= src/dongle/
+CODEXION_DONGLE			= create_dongles.c \
+						destroy_dongles.c \
+						get_dongle.c
 
-CODEXION_UTILS_DIR	= src/utils/
-CODEXION_UTILS		= log.c \
-					timestamp.c \
-					fill_params.c
+CODEXION_UTILS_DIR		= src/utils/
+CODEXION_UTILS			= log.c \
+						timestamp.c \
+						fill_params.c
 
 CODEXION_MONITORING_DIR	= src/monitoring/
 CODEXION_MONITORING		= monitoring_routine.c
 
-SRCS				= codexion.c \
-					$(addprefix $(CODEXION_CODER_DIR), $(CODEXION_CODER)) \
-					$(addprefix $(CODEXION_DONGLE_DIR), $(CODEXION_DONGLE)) \
-					$(addprefix $(CODEXION_UTILS_DIR), $(CODEXION_UTILS)) \
-					$(addprefix $(CODEXION_MONITORING_DIR), $(CODEXION_MONITORING))
-
-OBJS_DIR			= .objects
-OBJS				= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
-
-INCLUDES_DIR		= src/includes
-
-CC					= cc
-CFLAGS				= -Wall -Wextra -Werror
-IFLAGS				= -I $(INCLUDES_DIR)
-LFLAGS				= -pthread
+SRCS					= codexion.c \
+						$(addprefix $(CODEXION_CODER_DIR), $(CODEXION_CODER)) \
+						$(addprefix $(CODEXION_DONGLE_DIR), $(CODEXION_DONGLE)) \
+						$(addprefix $(CODEXION_UTILS_DIR), $(CODEXION_UTILS)) \
+						$(addprefix $(CODEXION_MONITORING_DIR), $(CODEXION_MONITORING))
+	
+OBJS_DIR				= .objects
+OBJS					= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
+	
+INCLUDES_DIR			= src/includes
+	
+CC						= cc
+CFLAGS					= -Wall -Wextra -Werror
+IFLAGS					= -I $(INCLUDES_DIR)
+LFLAGS					= -pthread
 
 all: $(NAME)
 

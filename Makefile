@@ -3,7 +3,8 @@ NAME					= codexion
 CODEXION_CODER_DIR		= src/coder/
 CODEXION_CODER			= create_coders.c \
 						release_dongles.c \
-						take_dongles.c
+						take_dongles.c \
+						coder_routine.c
 
 CODEXION_DONGLE_DIR		= src/dongle/
 CODEXION_DONGLE			= create_dongles.c \
@@ -13,7 +14,8 @@ CODEXION_DONGLE			= create_dongles.c \
 CODEXION_UTILS_DIR		= src/utils/
 CODEXION_UTILS			= log.c \
 						timestamp.c \
-						fill_params.c
+						fill_params.c \
+						error.c
 
 CODEXION_MONITORING_DIR	= src/monitoring/
 CODEXION_MONITORING		= monitoring_routine.c

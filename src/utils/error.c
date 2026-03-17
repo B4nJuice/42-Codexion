@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/09 18:14:22 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/17 11:54:45 by lgirard          ###   ########lyon.fr   */
+/*   Created: 2026/03/17 11:40:21 by lgirard           #+#    #+#             */
+/*   Updated: 2026/03/17 11:54:18 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
-# include "coder.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-int			malloc_error(void *param1, void *param2,
-				void *param3, void *param4);
-void		codexion_log(t_coder coder, const char *description);
-t_params	*fill_params(char **argv, int argc);
-void		start_timestamp(void);
-int			get_timestamp(void);
-
-#endif
+int	malloc_error(void *param1, void *param2, void *param3, void *param4)
+{
+	free(param1);
+	free(param2);
+	free(param3);
+	free(param4);
+	fprintf(stderr, "Malloc ERROR.\n");
+	return (1);
+}

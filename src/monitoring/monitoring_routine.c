@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 09:13:32 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/11 15:29:29 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/03/17 14:15:38 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "monitoring.h"
 
 int	is_burned_out(t_coder *coder, int burnout_time);
-int	is_compilation_satisfied(t_coder **coders, int required_compile);
+int	is_compilation_satisfied(t_coder *coder, int required_compile);
 
 void	*monitoring_routine(void *arg)
 {
@@ -27,34 +27,30 @@ void	*monitoring_routine(void *arg)
 	args = (t_monitoring_args *)arg;
 	params = args->params;
 	coders = args->coders;
-	i = 0;
-	while (!args->stop)
+	while (1)
 	{
-		while (coders[i])
+		while (!*(args->stop))
 		{
-			if (is_burned_out(coders[i], params.burnout_time) || \
-is_compilation_satisfied(coders, params.required_compile))
+			i = 0;
+			while (i < params.dongle_number)
 			{
-				*(args->stop) = 1;
-				break ;
+				if (is_burned_out(coders[i], params.burnout_time) || \
+	is_compilation_satisfied(coders[i], params.required_compile))
+				{
+					*(args->stop) = 1;
+					break ;
+				}
+				i++;
 			}
-			i++;
 		}
+		return (NULL);
 	}
-	return (NULL);
 }
 
-int	is_compilation_satisfied(t_coder **coders, int required_compile)
+int	is_compilation_satisfied(t_coder *coder, int required_compile)
 {
-	int	i;
-
-	i = 0;
-	while (coders[i])
-	{
-		if (coders[i]->compilation_number < required_compile)
-			return (0);
-		i++;
-	}
+	if (coder->compilation_number < required_compile)
+		return (0);
 	return (1);
 }
 

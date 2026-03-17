@@ -6,10 +6,12 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 10:30:53 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/11 10:20:06 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/03/17 14:10:40 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
+#include <unistd.h>
 #include "coder.h"
 #include "utils.h"
 
@@ -18,7 +20,7 @@ void	*coder_routine(void *arg)
 	t_thread_args	*args;
 
 	args = (t_thread_args *)arg;
-	while (!args->stop)
+	while (!*(args->stop))
 	{
 		take_dongles(args->coder, args->dongles, args->params.dongle_number);
 		codexion_log(*(args->coder), "is compiling");

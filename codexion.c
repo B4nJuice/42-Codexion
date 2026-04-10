@@ -19,7 +19,20 @@
 #include "utils.h"
 #include "monitoring.h"
 
-int main(int ac, char **av)
+static void	stop_and_join(pthread_t *threads, int n, int *stop)
+{
+	int	i;
+
+	*stop = 1;
+	i = 0;
+	while (i < n)
+	{
+		pthread_join(threads[i], NULL);
+		i++;
+	}
+}
+
+int	main(int ac, char **av)
 {
 	t_params			*params;
 	t_coder				*coders;
@@ -48,18 +61,54 @@ int main(int ac, char **av)
 	while (i < params->dongle_number)
 	{
 		args = malloc(sizeof(t_thread_args));
+		if (!args)
+		{
+			stop_and_join(threads, i, &stop);
+			destroy_dongles(dongles, params->dongle_number);
+			free(coders);
+			free(params);
+			free(threads);
+			return (1);
+		}
 		args->coder = &coders[i];
 		args->dongles = dongles;
 		args->params = *params;
 		args->stop = &stop;
-		pthread_create(&threads[i], NULL, coder_routine, args);
+		if (pthread_create(&threads[i], NULL, coder_routine, args) != 0)
+		{
+			free(args);
+			stop_and_join(threads, i, &stop);
+			destroy_dongles(dongles, params->dongle_number);
+			free(coders);
+			free(params);
+			free(threads);
+			return (1);
+		}
 		i++;
 	}
 	margs = malloc(sizeof(t_monitoring_args));
+	if (!margs)
+	{
+		stop_and_join(threads, i, &stop);
+		destroy_dongles(dongles, params->dongle_number);
+		free(coders);
+		free(params);
+		free(threads);
+		return (1);
+	}
 	margs->coders = &coders;
 	margs->params = *params;
 	margs->stop = &stop;
-	pthread_create(&threads[i], NULL, monitoring_routine, margs);
+	if (pthread_create(&threads[i], NULL, monitoring_routine, margs) != 0)
+	{
+		free(margs);
+		stop_and_join(threads, i, &stop);
+		destroy_dongles(dongles, params->dongle_number);
+		free(coders);
+		free(params);
+		free(threads);
+		return (1);
+	}
 	pthread_join(threads[i], NULL);
 	i = 0;
 	while (i < params->dongle_number)
@@ -71,5 +120,5 @@ int main(int ac, char **av)
 	free(coders);
 	free(params);
 	free(threads);
-	return (0);		
+	return (0);
 }

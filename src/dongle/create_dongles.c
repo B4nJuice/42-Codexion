@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 11:21:55 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/17 11:39:28 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 09:04:56 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <pthread.h>
 #include "dongle.h"
 
-void	fill_dongle(t_dongle *dongle)
+static void	fill_dongle(t_dongle *dongle)
 {
 	dongle->taken = 0;
 	dongle->last_time_taken = 0;

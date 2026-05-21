@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 10:30:00 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/17 14:12:05 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 09:10:48 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@ int main(int ac, char **av)
 	if (!coders || !dongles)
 		return (malloc_error((void *)coders,
 		(void *)dongles, (void *)params, NULL));
-	start_timestamp();
 	threads = malloc(sizeof(pthread_t) * (params->dongle_number + 1));
 	if (!threads)
 		return (malloc_error((void *)coders,
 		(void *)dongles, (void *)params, (void *)threads));
 	i = 0;
 	stop = 0;
+	start_timestamp();
 	while (i < params->dongle_number)
 	{
 		args = malloc(sizeof(t_thread_args));

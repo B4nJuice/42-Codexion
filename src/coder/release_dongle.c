@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   release_dongles.c                                  :+:      :+:    :+:   */
+/*   release_dongle.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 13:35:00 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 11:09:17 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 12:46:09 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include "core.h"
+#include "utils.h"
 
-void	release_dongles(t_coder *coder, t_dongle *dongle_array,
-	int dongle_number)
+void	release_dongle(t_dongle *dongle, int mode)
 {
-	t_dongle	*left_dongle;
-	t_dongle	*right_dongle;
-
-	left_dongle = get_dongle(coder->index, dongle_array, dongle_number);
-	right_dongle = get_dongle(coder->index + 1, dongle_array, dongle_number);
-	pthread_mutex_lock(&left_dongle->mutex);
-	pthread_mutex_lock(&right_dongle->mutex);
-	left_dongle->taken = 0;
-	right_dongle->taken = 0;
-	coder->first_dongle = 0;
-	coder->second_dongle = 0;
-	pthread_mutex_unlock(&left_dongle->mutex);
-	pthread_mutex_unlock(&right_dongle->mutex);
+	pthread_mutex_lock(&dongle->mutex);
+	if (mode)
+		dongle->last_time_taken = get_timestamp();
+	dongle->taken = 0;
+	pthread_mutex_unlock(&dongle->mutex);
 }

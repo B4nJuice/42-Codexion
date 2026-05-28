@@ -6,14 +6,13 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 10:30:00 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 11:24:57 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 13:39:25 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <stdlib.h>
 #include "core.h"
 #include "utils.h"
 #include "monitoring.h"
@@ -22,6 +21,10 @@ int init_threads(t_global *global)
 {
 	int	i = 0;
 
+	pthread_mutex_init(&(global->stop_mutex), NULL);
+	pthread_mutex_init(&(global->print_mutex), NULL);
+
+	start_timestamp();
 	while(i < global->params.dongle_number)
 	{
 		pthread_create(&global->coders[i].thread, NULL, coder_routine, &global->coders[i]);
@@ -31,12 +34,13 @@ int init_threads(t_global *global)
 		pthread_mutex_init(&(global->dongles[i].mutex), NULL);
 		i++;
 	}
+	start_monitor(global);
 	return (0);
 }
 
 int main(int ac, char **av)
 {
-	t_global		global;
+	static t_global		global = {0};
 
 	if (fill_params(av, ac, &(global.params)))
 		return (1);

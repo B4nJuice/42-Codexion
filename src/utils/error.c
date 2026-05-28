@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 11:40:21 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 11:10:57 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 12:36:13 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,9 @@ int	thread_destroy(t_global *global, int fail)
 		pthread_mutex_destroy(&(global->dongles[i].mutex));
 		i++;
 	}
+
+	pthread_mutex_destroy(&(global->stop_mutex));
+	pthread_mutex_destroy(&(global->print_mutex));
+
 	return (1);
 }

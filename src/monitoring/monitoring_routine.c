@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 09:13:32 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 10:30:30 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 13:48:54 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,60 +14,40 @@
 #include "utils.h"
 #include "monitoring.h"
 
-int	is_burned_out(t_coder *coder, int burnout_time);
-int	is_compilation_satisfied(t_coder *coder, int required_compile);
+int	check_coders(t_global *global);
 
-void	*monitoring_routine(void *arg)
+void	start_monitor(t_global *global)
 {
-	t_monitoring_global	*global;
-	t_params			params;
-	t_coder				**coders;
-	int					i;
-
-	global = (t_monitoring_global *)arg;
-	params = global->params;
-	coders = global->coders;
-	while (1)
+	while (is_running(global))
 	{
-		while (!*(global->stop))
+		if (check_coders(global))
 		{
-			i = 0;
-			while (i < params.dongle_number)
-			{
-				if (is_burned_out(coders[i], params.burnout_time) || \
-	is_compilation_satisfied(coders[i], params.required_compile))
-				{
-					*(global->stop) = 1;
-					break ;
-				}
-				i++;
-			}
+			stop_running(global);	
+			return ;
 		}
-		return (NULL);
 	}
 }
 
-#include <stdio.h>
-
-int	is_compilation_satisfied(t_coder *coder, int required_compile)
+int	check_coders(t_global *global)
 {
-	fprintf(stderr, "%i\n", coder->compilation_number);
-	if (coder->compilation_number < required_compile)
-		return (0);
-	return (1);
-}
-
-int	is_burned_out(t_coder *coder, int burnout_time)
-{
-	int	actual_time;
-
-	actual_time = get_timestamp();
-	if (actual_time - coder->last_compilation > burnout_time && \
-coder->state != COMPILING)
+	int i;
+	int status;
+	
+	i = 0;
+	status = 1;
+	while (i < global->params.dongle_number)
 	{
-		coder->state = BURNED_OUT;
-		codexion_log(*coder, "burned out");
-		return (1);
+		pthread_mutex_lock(&(global->coders[i].mutex));
+		if (global->coders[i].compilation_number < global->params.required_compile)
+			status = 0;
+		if (global->coders[i].last_compilation + global->params.burnout_time <= get_timestamp())
+		{
+			codexion_log(&(global->coders[i]), "has burned out");
+			stop_running(global);
+			return (0);
+		}
+		pthread_mutex_unlock(&(global->coders[i].mutex));
+		i++;
 	}
-	return (0);
+	return (status);
 }

@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 10:12:43 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 11:24:44 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 12:47:00 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ typedef struct s_global
 	t_dongle		*dongles;
 	t_params		params;
 	pthread_mutex_t stop_mutex;
-	int				*stop;
+	pthread_mutex_t print_mutex;
+	int				stop;
 }	t_global;
 
 typedef struct s_coder
@@ -72,14 +73,13 @@ typedef struct s_coder
 }	t_coder;
 
 /* Coder functions */
+void	release_dongle(t_dongle *dongle, int mode);
 int		create_coders(t_global *global);
+int		take_dongles(t_coder *coder);
 void	*coder_routine(void *arg);
-void	release_dongles(t_coder *coder, t_dongle *dongle_array,
-	int dongle_number);
-int		take_dongles(t_coder *coder, t_dongle *dongle_array, int dongle_number);
 
 /* Dongle functions */
-int			create_dongles(t_global *global);
 t_dongle	*get_dongle(int index, t_dongle *dongle_array, int dongle_number);
+int			create_dongles(t_global *global);
 
 #endif

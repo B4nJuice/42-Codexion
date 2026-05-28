@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 11:21:55 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 11:09:37 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 13:43:26 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 #include "utils.h"
 #include <pthread.h>
 
-static void	fill_dongle(t_dongle *dongle)
+static void	fill_dongle(t_dongle *dongle, int cooldown)
 {
 	dongle->taken = 0;
-	dongle->last_time_taken = 0;
+	dongle->last_time_taken = -cooldown;
 }
 
 int	create_dongles(t_global *global)
@@ -32,7 +32,7 @@ int	create_dongles(t_global *global)
 	i = 0;
 	while (i < global->params.dongle_number)
 	{
-		fill_dongle(&(global->dongles[i]));
+		fill_dongle(&(global->dongles[i]), global->params.dongle_cooldown);
 		i++;
 	}
 	return (0);

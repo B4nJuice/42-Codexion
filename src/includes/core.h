@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   coder.h                                            :+:      :+:    :+:   */
+/*   core.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 10:12:43 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 09:50:28 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 11:24:44 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CODER_H
-# define CODER_H
+#ifndef CORE_H
+# define CORE_H
 
-# include "dongle.h"
+# include <pthread.h>
 
 typedef enum e_coder_state
 {
@@ -30,20 +30,12 @@ typedef enum e_coder_first_check
 	RIGHT
 }	t_coder_first_check;
 
-typedef struct s_coder
+typedef struct s_dongle
 {
-	int					index;
-	int					left_hand;
-	int					right_hand;
-	int					last_compilation;
-	int					compilation_number;
-	t_params			params;
-	t_coder_state		state;
-	t_coder_first_check	first_check;
-	pthread_t			*thread;
-	t_thread_args		*args;
-	
-}	t_coder;
+	int				taken;
+	int				last_time_taken;
+	pthread_mutex_t	mutex;
+}	t_dongle;
 
 typedef struct s_params
 {
@@ -57,19 +49,37 @@ typedef struct s_params
 	const char	*scheduler;
 }	t_params;
 
-typedef struct s_thread_args
+typedef struct s_global
 {
-	t_coder			*coder;
+	struct s_coder	*coders;
 	t_dongle		*dongles;
 	t_params		params;
 	pthread_mutex_t stop_mutex;
 	int				*stop;
-}	t_thread_args;
+}	t_global;
 
-t_coder	*create_coders(int number);
+typedef struct s_coder
+{
+	int					index;
+	int					last_compilation;
+	int					compilation_number;
+	pthread_mutex_t		mutex;
+	t_coder_state		state;
+	pthread_t			thread;
+	t_dongle			*first_dongle;
+	t_dongle			*second_dongle;
+	t_global			*global;
+}	t_coder;
+
+/* Coder functions */
+int		create_coders(t_global *global);
 void	*coder_routine(void *arg);
 void	release_dongles(t_coder *coder, t_dongle *dongle_array,
 	int dongle_number);
 int		take_dongles(t_coder *coder, t_dongle *dongle_array, int dongle_number);
+
+/* Dongle functions */
+int			create_dongles(t_global *global);
+t_dongle	*get_dongle(int index, t_dongle *dongle_array, int dongle_number);
 
 #endif

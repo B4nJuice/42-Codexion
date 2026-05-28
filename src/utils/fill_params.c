@@ -6,11 +6,11 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 09:42:23 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/21 09:15:16 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 10:13:29 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "coder.h"
+#include "core.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,30 +18,19 @@
 int		are_params_valid(t_params *params);
 void	get_params(t_params *params, char **argv);
 
-t_params	*fill_params(char **argv, int argc)
+int	fill_params(char **argv, int argc, t_params *params)
 {
-	t_params	*params;
-
 	if (argc != 9)
 	{
 		fprintf(stderr, "Invalid arguments, try: ./codexion [number_of_coders]\
 [time_to_burnout] [time_to_compile] [time_to_debug] [time_to_refactor]\
 [number_of_compiles_required] [dongle_cooldown] [scheduler]\n");
-		return (NULL);
-	}
-	params = malloc(sizeof(t_params));
-	if (!params)
-	{
-		fprintf(stderr, "Malloc ERROR.\n");
-		return (NULL);
+		return (1);
 	}
 	get_params(params, argv);
 	if (!are_params_valid(params))
-	{
-		free(params);
-		return (NULL);
-	}
-	return (params);
+		return (1);
+	return (0);
 }
 
 void	get_params(t_params *params, char **argv)

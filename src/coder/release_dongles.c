@@ -6,13 +6,12 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 13:35:00 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 09:11:05 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 11:09:17 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
-#include "coder.h"
-#include "dongle.h"
+#include "core.h"
 
 void	release_dongles(t_coder *coder, t_dongle *dongle_array,
 	int dongle_number)
@@ -26,8 +25,8 @@ void	release_dongles(t_coder *coder, t_dongle *dongle_array,
 	pthread_mutex_lock(&right_dongle->mutex);
 	left_dongle->taken = 0;
 	right_dongle->taken = 0;
-	coder->left_hand = 0;
-	coder->right_hand = 0;
+	coder->first_dongle = 0;
+	coder->second_dongle = 0;
 	pthread_mutex_unlock(&left_dongle->mutex);
 	pthread_mutex_unlock(&right_dongle->mutex);
 }

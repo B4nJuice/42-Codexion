@@ -6,42 +6,55 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 10:12:22 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 08:50:13 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 11:09:00 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "stdlib.h"
-#include "coder.h"
+#include "stdio.h"
+#include "core.h"
+#include "utils.h"
 
-void	fill_coder(t_coder *coder, int index, t_coder_first_check first_check,\
-	t_params params)
+
+void	fill_coder(t_coder *coder, int index, t_global *global)
 {
 	coder->index = index;
-	coder->left_hand = 0;
-	coder->right_hand = 0;
 	coder->state = IDLE;
-	coder->first_check = first_check;
 	coder->last_compilation = 0;
-	coder->params = params;
+	coder->global = global;
 }
 
-t_coder	*create_coders(t_params params)
+int	create_coders(t_global *global)
 {
-	t_coder				*array;
-	t_coder_first_check	first_check;
 	int					i;
 
-	first_check = LEFT;
-	array = malloc(params.dongle_number * sizeof(t_coder));
-	if (!array)
-		return (NULL);
+	global->coders = malloc(global->params.dongle_number * sizeof(t_coder));
+	if (!(global->coders))
+		return (malloc_error((void *)global->coders, NULL, NULL));
 	i = 0;
-	while (i < params.dongle_number)
+	while (i < global->params.dongle_number)
 	{
-		if (i == params.dongle_number - 1)
-			first_check = RIGHT;
-		fill_coder(&(array[i]), i, first_check, params);
+		if (i == global->params.dongle_number - 1)
+		{
+			global->coders[i].first_dongle = get_dongle(i + 1, global->dongles, global->params.dongle_number);
+			global->coders[i].second_dongle = get_dongle(i, global->dongles, global->params.dongle_number);
+		}
+		else
+		{
+			global->coders[i].first_dongle = get_dongle(i, global->dongles, global->params.dongle_number);
+			global->coders[i].second_dongle = get_dongle(i + 1, global->dongles, global->params.dongle_number);
+		}
+		fill_coder(&(global->coders[i]), i, global);
 		i++;
 	}
-	return (array);
+	return (0);
 }
+
+// __builtin_printf("=== CODER #%d ===\n", coder->index);
+// __builtin_printf("  Left hand:        %p\n", (void *)coder->first_dongle);
+// __builtin_printf("  Right hand:       %p\n", (void *)coder->second_dongle);
+// __builtin_printf("  Last compilation: %d\n", coder->last_compilation);
+// __builtin_printf("  Compilation nb:   %d\n", coder->compilation_number);
+// __builtin_printf("  Thread:           %p\n", (void *)coder->thread);
+// __builtin_printf("  global:             %p\n", (void *)coder->global);
+// __builtin_printf("\n");

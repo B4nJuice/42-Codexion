@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 10:30:00 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 09:49:31 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 11:24:57 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,59 +14,67 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
-#include "coder.h"
-#include "dongle.h"
+#include "core.h"
 #include "utils.h"
 #include "monitoring.h"
 
+int init_threads(t_global *global)
+{
+	int	i = 0;
+
+	while(i < global->params.dongle_number)
+	{
+		pthread_create(&global->coders[i].thread, NULL, coder_routine, &global->coders[i]);
+		if(!(global->coders[i].thread))
+			return thread_destroy(global, i);
+		pthread_mutex_init(&(global->coders[i].mutex), NULL);
+		pthread_mutex_init(&(global->dongles[i].mutex), NULL);
+		i++;
+	}
+	return (0);
+}
+
 int main(int ac, char **av)
 {
-	t_thread_args		args;
-	t_monitoring_args	*margs;
-	int				stop;
-	int				i;
+	t_global		global;
 
-	params = fill_params(av, ac);
-	if (!params)
+	if (fill_params(av, ac, &(global.params)))
 		return (1);
-	args = malloc(sizeof(t_thread_args));
-	coders = create_coders(params);
-	dongles = create_dongles(params->dongle_number);
-	if (!coders || !dongles)
-		return (malloc_error((void *)coders,
-		(void *)dongles, (void *)params, NULL));
-	threads = malloc(sizeof(pthread_t) * (params->dongle_number + 1));
-	if (!threads)
-		return (malloc_error((void *)coders,
-		(void *)dongles, (void *)params, (void *)threads));
-	i = 0;
-	stop = 0;
-	while (i < params->dongle_number)
-	{
-		args = malloc(sizeof(t_thread_args));
-		args->coder = &coders[i];
-		args->dongles = dongles;
-		args->params = *params;
-		args->stop = &stop;
-		pthread_create(&threads[i], NULL, coder_routine, args);
-		i++;
-	}
-	start_timestamp();
-	margs = malloc(sizeof(t_monitoring_args));
-	margs->coders = &coders;
-	margs->params = *params;
-	margs->stop = &stop;
-	pthread_create(&threads[i], NULL, monitoring_routine, margs);
-	i = 0;
-	while (i < params->dongle_number)
-	{
-		pthread_join(threads[i], NULL);
-		i++;
-	}
-	pthread_join(threads[i], NULL);
-	destroy_dongles(dongles, params->dongle_number);
-	free(coders);
-	free(params);
-	free(threads);
-	return (0);		
+	if (create_dongles(&global))
+		return (1);
+	if (create_coders(&global))
+		return (1);		
+	if(init_threads(&global))
+		return (1);
+	// if (!threads)
+	// 	return (malloc_error((void *)coders,
+	// 	(void *)dongles, (void *)params, (void *)threads));
+	// i = 0;
+	// stop = 0;
+	// while (i < params->dongle_number)
+	// {
+	// 	global = malloc(sizeof(t_global));
+	// 	global->coder = &coders[i];
+	// 	global->dongles = dongles;
+	// 	global->params = *params;
+	// 	global->stop = &stop;
+	// 	pthread_create(&threads[i], NULL, coder_routine, global);
+	// 	i++;
+	// }
+	// start_timestamp();
+	// mglobal = malloc(sizeof(t_monitoring_global));
+	// mglobal->coders = &coders;
+	// mglobal->params = *params;
+	// mglobal->stop = &stop;
+	// pthread_create(&threads[i], NULL, monitoring_routine, mglobal);
+	// i = 0;
+	// while (i < params->dongle_number)
+	// {
+	// 	pthread_join(threads[i], NULL);
+	// 	i++;
+	// }
+	thread_destroy(&global, global.params.dongle_number);
+	free(global.coders);
+	free(global.dongles);
+	return (0);
 }

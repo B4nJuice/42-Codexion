@@ -6,37 +6,37 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 10:30:53 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/17 14:10:40 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 11:21:49 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
-#include "coder.h"
+#include "core.h"
 #include "utils.h"
 
 void	*coder_routine(void *arg)
 {
-	t_thread_args	*args;
+	t_coder	*coder;
 
-	args = (t_thread_args *)arg;
-	while (!*(args->stop))
-	{
-		take_dongles(args->coder, args->dongles, args->params.dongle_number);
-		codexion_log(*(args->coder), "is compiling");
-		args->coder->state = COMPILING;
-		args->coder->last_compilation = get_timestamp();
-		usleep(args->params.compiling_time*1000);
-		release_dongles(args->coder, args->dongles, args->params.dongle_number);
-		args->coder->compilation_number++;
-		args->coder->state = DEBUGGING;
-		codexion_log(*(args->coder), "is debugging");
-		usleep(args->params.debugging_time*1000);
-		args->coder->state = REFACTORING;
-		codexion_log(*(args->coder), "is refactoring");
-		usleep(args->params.refactoring_time*1000);
-		args->coder->state = IDLE;
-	}
-	free(args);
+	coder = (t_coder *)arg;
+	// while (!*(global->stop))
+	// {
+	// 	take_dongles(global->coder, global->dongles, global->params.dongle_number);
+	// 	codexion_log(*(global->coder), "is compiling");
+	// 	global->coder->state = COMPILING;
+	// 	global->coder->last_compilation = get_timestamp();
+	// 	usleep(global->params.compiling_time*1000);
+	// 	release_dongles(global->coder, global->dongles, global->params.dongle_number);
+	// 	global->coder->compilation_number++;
+	// 	global->coder->state = DEBUGGING;
+	// 	codexion_log(*(global->coder), "is debugging");
+	// 	usleep(global->params.debugging_time*1000);
+	// 	global->coder->state = REFACTORING;
+	// 	codexion_log(*(global->coder), "is refactoring");
+	// 	usleep(global->params.refactoring_time*1000);
+	// 	global->coder->state = IDLE;
+	// }
+	// free(global);
 	return (NULL);
 }

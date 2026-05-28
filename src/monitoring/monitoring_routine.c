@@ -6,11 +6,11 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 09:13:32 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 08:33:38 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 10:30:30 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "coder.h"
+#include "core.h"
 #include "utils.h"
 #include "monitoring.h"
 
@@ -19,17 +19,17 @@ int	is_compilation_satisfied(t_coder *coder, int required_compile);
 
 void	*monitoring_routine(void *arg)
 {
-	t_monitoring_args	*args;
+	t_monitoring_global	*global;
 	t_params			params;
 	t_coder				**coders;
 	int					i;
 
-	args = (t_monitoring_args *)arg;
-	params = args->params;
-	coders = args->coders;
+	global = (t_monitoring_global *)arg;
+	params = global->params;
+	coders = global->coders;
 	while (1)
 	{
-		while (!*(args->stop))
+		while (!*(global->stop))
 		{
 			i = 0;
 			while (i < params.dongle_number)
@@ -37,7 +37,7 @@ void	*monitoring_routine(void *arg)
 				if (is_burned_out(coders[i], params.burnout_time) || \
 	is_compilation_satisfied(coders[i], params.required_compile))
 				{
-					*(args->stop) = 1;
+					*(global->stop) = 1;
 					break ;
 				}
 				i++;

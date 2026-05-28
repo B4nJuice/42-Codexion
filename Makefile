@@ -2,13 +2,12 @@ NAME					= codexion
 
 CODEXION_CODER_DIR		= src/coder/
 CODEXION_CODER			= create_coders.c \
-						release_dongle.c \
+						release_dongles.c \
 						take_dongles.c \
 						coder_routine.c
 
 CODEXION_DONGLE_DIR		= src/dongle/
 CODEXION_DONGLE			= create_dongles.c \
-						destroy_dongles.c \
 						get_dongle.c
 
 CODEXION_UTILS_DIR		= src/utils/
@@ -33,7 +32,7 @@ OBJS					= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
 INCLUDES_DIR			= src/includes
 	
 CC						= cc
-CFLAGS					= -Wall -Wextra -Werror
+CFLAGS					= -Wall -Wextra -Werror -g3
 IFLAGS					= -I $(INCLUDES_DIR)
 LFLAGS					= -pthread
 

@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 09:13:32 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 15:41:42 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 15:55:35 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ static void	start(t_global *global)
 	start_timestamp();
 	pthread_mutex_lock(&global->start_mutex);
 	global->start_status = 1;
-	pthread_mutex_unlock(&global->start_mutex);
 	pthread_cond_broadcast(&(global->cond));
+	pthread_mtex_unlock(&global->start_mutex);
 }
 
 void	start_monitor(t_global *global)
@@ -36,7 +36,7 @@ void	start_monitor(t_global *global)
 			stop_running(global);	
 			return ;
 		}
-		usleep(1500);
+		usleep(500);
 	}
 }
 

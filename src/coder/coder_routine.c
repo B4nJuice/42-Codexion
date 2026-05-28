@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 10:30:53 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 15:20:00 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 15:52:04 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	ft_wait(t_global *global, int time_to_wait)
 	start = get_timestamp();
 	while (is_running(global) && get_timestamp() < start + time_to_wait)
 	{
-		usleep(100);
+		usleep(250);
 	}
 }
 

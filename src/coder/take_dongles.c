@@ -6,11 +6,12 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 12:08:20 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 12:46:27 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 15:51:24 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
+#include <unistd.h>
 #include "core.h"
 #include "utils.h"
 
@@ -45,6 +46,7 @@ int	take_dongles(t_coder *coder)
 			else
 				release_dongle(coder->first_dongle, 0);
 		}
+		usleep(100);
 	}
 	return (0);
 	

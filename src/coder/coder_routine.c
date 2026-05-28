@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 10:30:53 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 13:59:55 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 15:20:00 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,27 @@ static void	ft_wait(t_global *global, int time_to_wait)
 
 	start = get_timestamp();
 	while (is_running(global) && get_timestamp() < start + time_to_wait)
-	{}
+	{
+		usleep(100);
+	}
 }
 
+void	wait_to_start(t_global *global)
+{
+	pthread_mutex_lock(&global->start_mutex);
+	while (global->start_status == 0)
+		pthread_cond_wait(&global->cond, &global->start_mutex);
+	pthread_mutex_unlock(&global->start_mutex);
+}
 
 void	*coder_routine(void *arg)
 {
 	t_coder	*coder;
 
 	coder = (t_coder *)arg;
+	wait_to_start(coder->global);
+	if (coder->index % 2 == 1)
+		usleep(1500);
 	while (is_running(coder->global))
 	{
 		take_dongles(coder);

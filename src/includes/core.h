@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 10:12:43 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 12:47:00 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 14:48:07 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,11 @@ typedef struct s_global
 	struct s_coder	*coders;
 	t_dongle		*dongles;
 	t_params		params;
+	int				start_status;
+	pthread_cond_t	cond;
 	pthread_mutex_t stop_mutex;
 	pthread_mutex_t print_mutex;
+	pthread_mutex_t start_mutex;
 	int				stop;
 }	t_global;
 

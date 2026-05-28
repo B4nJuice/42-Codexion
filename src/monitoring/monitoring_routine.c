@@ -6,18 +6,29 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 09:13:32 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 13:48:54 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 15:41:42 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "core.h"
 #include "utils.h"
 #include "monitoring.h"
+#include <unistd.h>
 
 int	check_coders(t_global *global);
 
+static void	start(t_global *global)
+{
+	start_timestamp();
+	pthread_mutex_lock(&global->start_mutex);
+	global->start_status = 1;
+	pthread_mutex_unlock(&global->start_mutex);
+	pthread_cond_broadcast(&(global->cond));
+}
+
 void	start_monitor(t_global *global)
 {
+	start(global);
 	while (is_running(global))
 	{
 		if (check_coders(global))
@@ -25,6 +36,7 @@ void	start_monitor(t_global *global)
 			stop_running(global);	
 			return ;
 		}
+		usleep(1500);
 	}
 }
 
@@ -43,8 +55,8 @@ int	check_coders(t_global *global)
 		if (global->coders[i].last_compilation + global->params.burnout_time <= get_timestamp())
 		{
 			codexion_log(&(global->coders[i]), "has burned out");
-			stop_running(global);
-			return (0);
+			pthread_mutex_unlock(&(global->coders[i].mutex));
+			return (1);
 		}
 		pthread_mutex_unlock(&(global->coders[i].mutex));
 		i++;

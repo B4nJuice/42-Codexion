@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 10:30:00 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 13:39:25 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 15:01:57 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,15 @@ int init_threads(t_global *global)
 
 	pthread_mutex_init(&(global->stop_mutex), NULL);
 	pthread_mutex_init(&(global->print_mutex), NULL);
-
-	start_timestamp();
+	pthread_mutex_init(&(global->start_mutex), NULL);
+	pthread_cond_init(&global->cond, NULL);
 	while(i < global->params.dongle_number)
 	{
+		pthread_mutex_init(&(global->coders[i].mutex), NULL);
+		pthread_mutex_init(&(global->dongles[i].mutex), NULL);
 		pthread_create(&global->coders[i].thread, NULL, coder_routine, &global->coders[i]);
 		if(!(global->coders[i].thread))
 			return thread_destroy(global, i);
-		pthread_mutex_init(&(global->coders[i].mutex), NULL);
-		pthread_mutex_init(&(global->dongles[i].mutex), NULL);
 		i++;
 	}
 	start_monitor(global);
@@ -47,7 +47,7 @@ int main(int ac, char **av)
 	if (create_dongles(&global))
 		return (1);
 	if (create_coders(&global))
-		return (1);		
+		return (1);
 	if(init_threads(&global))
 		return (1);
 	// if (!threads)

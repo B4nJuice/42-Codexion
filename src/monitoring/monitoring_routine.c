@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 09:13:32 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/21 09:25:37 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 08:33:38 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,11 @@ void	*monitoring_routine(void *arg)
 	}
 }
 
+#include <stdio.h>
+
 int	is_compilation_satisfied(t_coder *coder, int required_compile)
 {
+	fprintf(stderr, "%i\n", coder->compilation_number);
 	if (coder->compilation_number < required_compile)
 		return (0);
 	return (1);

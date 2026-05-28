@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 13:35:00 by lgirard           #+#    #+#             */
-/*   Updated: 2026/03/09 18:12:22 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 09:11:05 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	release_dongles(t_coder *coder, t_dongle *dongle_array,
 
 	left_dongle = get_dongle(coder->index, dongle_array, dongle_number);
 	right_dongle = get_dongle(coder->index + 1, dongle_array, dongle_number);
+	pthread_mutex_lock(&left_dongle->mutex);
+	pthread_mutex_lock(&right_dongle->mutex);
 	left_dongle->taken = 0;
 	right_dongle->taken = 0;
 	coder->left_hand = 0;

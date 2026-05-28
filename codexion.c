@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 10:30:00 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/21 09:10:48 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/05/28 09:49:31 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,7 @@
 
 int main(int ac, char **av)
 {
-	t_params			*params;
-	t_coder				*coders;
-	t_dongle			*dongles;
-	pthread_t			*threads;
-	t_thread_args		*args;
+	t_thread_args		args;
 	t_monitoring_args	*margs;
 	int				stop;
 	int				i;
@@ -33,7 +29,8 @@ int main(int ac, char **av)
 	params = fill_params(av, ac);
 	if (!params)
 		return (1);
-	coders = create_coders(params->dongle_number);
+	args = malloc(sizeof(t_thread_args));
+	coders = create_coders(params);
 	dongles = create_dongles(params->dongle_number);
 	if (!coders || !dongles)
 		return (malloc_error((void *)coders,
@@ -44,7 +41,6 @@ int main(int ac, char **av)
 		(void *)dongles, (void *)params, (void *)threads));
 	i = 0;
 	stop = 0;
-	start_timestamp();
 	while (i < params->dongle_number)
 	{
 		args = malloc(sizeof(t_thread_args));
@@ -55,18 +51,19 @@ int main(int ac, char **av)
 		pthread_create(&threads[i], NULL, coder_routine, args);
 		i++;
 	}
+	start_timestamp();
 	margs = malloc(sizeof(t_monitoring_args));
 	margs->coders = &coders;
 	margs->params = *params;
 	margs->stop = &stop;
 	pthread_create(&threads[i], NULL, monitoring_routine, margs);
-	pthread_join(threads[i], NULL);
 	i = 0;
 	while (i < params->dongle_number)
 	{
 		pthread_join(threads[i], NULL);
 		i++;
 	}
+	pthread_join(threads[i], NULL);
 	destroy_dongles(dongles, params->dongle_number);
 	free(coders);
 	free(params);

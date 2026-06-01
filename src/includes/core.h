@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 10:12:43 by lgirard           #+#    #+#             */
-/*   Updated: 2026/06/01 11:27:49 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/06/01 13:03:22 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,11 @@
 
 typedef struct s_coder t_coder;
 
-typedef enum e_coder_state
+typedef enum e_scheduler
 {
-	IDLE,
-	COMPILING,
-	DEBUGGING,
-	REFACTORING,
-	BURNED_OUT
-}	t_coder_state;
+	FIFO,
+	EDF
+}	t_scheduler;
 
 typedef enum e_coder_first_check
 {
@@ -50,7 +47,8 @@ typedef struct s_params
 	int			refactoring_time;
 	int			required_compile;
 	int			dongle_cooldown;
-	const char	*scheduler;
+	const char *scheduler_text;
+	t_scheduler	scheduler;
 }	t_params;
 
 typedef struct s_global
@@ -72,7 +70,6 @@ typedef struct s_coder
 	int					last_compilation;
 	int					compilation_number;
 	pthread_mutex_t		mutex;
-	t_coder_state		state;
 	pthread_t			thread;
 	t_dongle			*first_dongle;
 	t_dongle			*second_dongle;
@@ -87,6 +84,7 @@ void	*coder_routine(void *arg);
 
 /* Dongle functions */
 t_dongle	*get_dongle(int index, t_dongle *dongle_array, int dongle_number);
+void		ft_swap_dongle(t_dongle *dongle, t_scheduler scheduler);
 int			create_dongles(t_global *global);
 
 #endif

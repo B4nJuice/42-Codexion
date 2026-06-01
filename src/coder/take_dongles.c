@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 12:08:20 by lgirard           #+#    #+#             */
-/*   Updated: 2026/06/01 11:58:50 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/06/01 13:10:01 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,30 @@
 #include "core.h"
 #include "utils.h"
 
-void	ft_swap_dongle(t_dongle *dongle)
+static int		get_last_compilation(t_coder *coder)
+{
+	int	last_compilation;
+
+	pthread_mutex_lock(&(coder->mutex));
+	last_compilation = coder->last_compilation;
+	if (coder->compilation_number >= coder->global->params.required_compile)
+		last_compilation = 2147483647;
+	pthread_mutex_unlock(&(coder->mutex));
+	return (last_compilation);
+}
+
+void	ft_swap_dongle(t_dongle *dongle, t_scheduler scheduler)
 {
 	t_coder	*coder_temp;
 
 	pthread_mutex_lock(&dongle->mutex);
-	coder_temp = dongle->coder1;
-	dongle->coder1 = dongle->coder2;
-	dongle->coder2 = coder_temp;
+	if (scheduler == FIFO || get_last_compilation(dongle->coder1) > get_last_compilation(dongle->coder2))
+	{
+		coder_temp = dongle->coder1;
+		dongle->coder1 = dongle->coder2;
+		dongle->coder2 = coder_temp;
+	}
+	
 	pthread_mutex_unlock(&dongle->mutex);
 }
 
@@ -52,8 +68,6 @@ int	take_dongles(t_coder *coder)
 				{
 					codexion_log(coder, "has taken a dongle");
 					codexion_log(coder, "has taken a dongle");
-					ft_swap_dongle(coder->first_dongle);
-					ft_swap_dongle(coder->second_dongle);
 					return (0);
 				}
 			else

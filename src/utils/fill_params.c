@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 09:42:23 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 10:13:29 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/06/01 12:51:24 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,11 @@ void	get_params(t_params *params, char **argv)
 	params->refactoring_time = atoi(argv[5]);
 	params->required_compile = atoi(argv[6]);
 	params->dongle_cooldown = atoi(argv[7]);
-	params->scheduler = argv[8];
+	if (!strcmp(argv[8], "fifo"))
+		params->scheduler = FIFO;
+	if (!strcmp(argv[8], "edf"))
+		params->scheduler = EDF;
+	params->scheduler_text = argv[8];
 }
 
 int	are_params_valid(t_params *params)
@@ -54,7 +58,7 @@ params->dongle_cooldown < 0)
 		fprintf(stderr, "All parameters have to be positive integers.\n");
 		return (0);
 	}
-	if (strcmp(params->scheduler, "edf") && strcmp(params->scheduler, "fifo"))
+	if (strcmp(params->scheduler_text, "edf") && strcmp(params->scheduler_text, "fifo"))
 	{
 		fprintf(stderr, "Scheduler have to be either \"fifo\" or \"edf\"\n");
 		return (0);

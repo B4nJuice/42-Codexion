@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 10:12:22 by lgirard           #+#    #+#             */
-/*   Updated: 2026/06/01 13:28:27 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/06/01 13:36:05 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 void	fill_coder(t_coder *coder, int index, t_global *global)
 {
 	coder->index = index;
-	coder->last_compilation = 0;
+	coder->last_compilation = -1;
 	coder->compilation_number = 0;
 	coder->global = global;
 }

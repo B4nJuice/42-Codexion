@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 10:30:00 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 15:01:57 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/06/01 11:53:56 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,16 @@ int init_threads(t_global *global)
 		pthread_mutex_init(&(global->coders[i].mutex), NULL);
 		pthread_mutex_init(&(global->dongles[i].mutex), NULL);
 		pthread_create(&global->coders[i].thread, NULL, coder_routine, &global->coders[i]);
+		if (i%2)
+		{
+			global->dongles[i].coder1 = &(global->coders[i]);
+			global->dongles[i].coder2 = &(global->coders[(i + global->params.dongle_number - 1) % global->params.dongle_number]);
+		}
+		else
+		{
+			global->dongles[i].coder1 = &(global->coders[(i + global->params.dongle_number - 1) % global->params.dongle_number]);
+			global->dongles[i].coder2 = &(global->coders[i]);
+		}
 		if(!(global->coders[i].thread))
 			return thread_destroy(global, i);
 		i++;

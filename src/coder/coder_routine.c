@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 10:30:53 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 15:52:04 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/06/01 11:34:19 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ void	*coder_routine(void *arg)
 
 	coder = (t_coder *)arg;
 	wait_to_start(coder->global);
-	if (coder->index % 2 == 1)
-		usleep(1500);
 	while (is_running(coder->global))
 	{
 		take_dongles(coder);

@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 10:12:43 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 14:48:07 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/06/01 11:27:49 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define CORE_H
 
 # include <pthread.h>
+
+typedef struct s_coder t_coder;
 
 typedef enum e_coder_state
 {
@@ -34,6 +36,8 @@ typedef struct s_dongle
 {
 	int				taken;
 	int				last_time_taken;
+	t_coder			*coder1;
+	t_coder			*coder2;
 	pthread_mutex_t	mutex;
 }	t_dongle;
 

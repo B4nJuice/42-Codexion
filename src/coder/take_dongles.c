@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 12:08:20 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 15:51:24 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/06/01 11:58:50 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,28 @@
 #include "core.h"
 #include "utils.h"
 
+void	ft_swap_dongle(t_dongle *dongle)
+{
+	t_coder	*coder_temp;
+
+	pthread_mutex_lock(&dongle->mutex);
+	coder_temp = dongle->coder1;
+	dongle->coder1 = dongle->coder2;
+	dongle->coder2 = coder_temp;
+	pthread_mutex_unlock(&dongle->mutex);
+}
+
 int try_to_take(t_dongle *dongle, t_coder *coder)
 {
 	int	status;
 	
 	status = 0;
 	pthread_mutex_lock(&dongle->mutex);
-	if(!dongle->taken && dongle->last_time_taken + coder->global->params.dongle_cooldown <= get_timestamp())
+	if (dongle->coder1 == coder && !dongle->taken && dongle->last_time_taken + coder->global->params.dongle_cooldown <= get_timestamp())
 	{
 		dongle->taken = 1;
 		status = 1;
-	}
+	}	
 	pthread_mutex_unlock(&dongle->mutex);
 	return status;
 }
@@ -41,6 +52,8 @@ int	take_dongles(t_coder *coder)
 				{
 					codexion_log(coder, "has taken a dongle");
 					codexion_log(coder, "has taken a dongle");
+					ft_swap_dongle(coder->first_dongle);
+					ft_swap_dongle(coder->second_dongle);
 					return (0);
 				}
 			else
@@ -49,5 +62,4 @@ int	take_dongles(t_coder *coder)
 		usleep(100);
 	}
 	return (0);
-	
 }

@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/02 12:13:57 by lgirard           #+#    #+#             */
-/*   Updated: 2026/06/02 12:15:34 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/06/02 12:29:50 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,16 @@ int	init_threads(t_global *global)
 	i = 0;
 	init_mutex(global);
 	pthread_cond_init(&global->cond, NULL);
-	while(i < global->params.dongle_number)
+	while (i < global->params.dongle_number)
 	{
 		pthread_mutex_init(&(global->coders[i].mutex), NULL);
 		pthread_mutex_init(&(global->dongles[i].mutex), NULL);
-		pthread_create(&global->coders[i].thread, NULL, coder_routine,\
-			&global->coders[i]);
-		global->dongles[i].coder1 = &(global->coders[i * (i%2) + ((i + global->params.dongle_number - 1) % global->params.dongle_number) * !(i%2)]);
-		global->dongles[i].coder2 = &(global->coders[i * !(i%2) + ((i + global->params.dongle_number - 1) % global->params.dongle_number) * (i%2)]);
+		pthread_create(&global->coders[i].thread, NULL, coder_routine, \
+&global->coders[i]);
+		global->dongles[i].coder1 = &(global->coders[i * (i % 2) + ((i + \
+global->params.dongle_number - 1) % global->params.dongle_number) * !(i % 2)]);
+		global->dongles[i].coder2 = &(global->coders[i * !(i % 2) + ((i + \
+global->params.dongle_number - 1) % global->params.dongle_number) * (i % 2)]);
 		if (!(global->coders[i].thread))
 			return (thread_destroy(global, i));
 		i++;

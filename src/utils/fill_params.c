@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 09:42:23 by lgirard           #+#    #+#             */
-/*   Updated: 2026/06/01 12:51:24 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/06/02 12:30:16 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ params->dongle_cooldown < 0)
 		fprintf(stderr, "All parameters have to be positive integers.\n");
 		return (0);
 	}
-	if (strcmp(params->scheduler_text, "edf") && strcmp(params->scheduler_text, "fifo"))
+	if (strcmp(params->scheduler_text, "edf") && \
+strcmp(params->scheduler_text, "fifo"))
 	{
 		fprintf(stderr, "Scheduler have to be either \"fifo\" or \"edf\"\n");
 		return (0);

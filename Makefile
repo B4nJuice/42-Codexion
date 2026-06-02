@@ -34,7 +34,7 @@ OBJS					= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
 INCLUDES_DIR			= src/includes
 	
 CC						= cc
-CFLAGS					= -Wall -Wextra -Werror
+CFLAGS					= -Wall -Wextra -Werror -std=c89 -D_XOPEN_SOURCE=500
 IFLAGS					= -I $(INCLUDES_DIR)
 LFLAGS					= -pthread
 

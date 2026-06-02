@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 10:12:43 by lgirard           #+#    #+#             */
-/*   Updated: 2026/06/02 12:20:52 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/06/02 13:45:26 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_global
 	int				stop;
 }	t_global;
 
-typedef struct s_coder
+struct s_coder
 {
 	int					index;
 	int					last_compilation;
@@ -74,7 +74,7 @@ typedef struct s_coder
 	t_dongle			*first_dongle;
 	t_dongle			*second_dongle;
 	t_global			*global;
-}	t_coder;
+};
 
 /* Coder functions */
 void		release_dongle(t_dongle *dongle, int mode);

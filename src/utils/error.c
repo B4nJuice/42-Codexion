@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 11:40:21 by lgirard           #+#    #+#             */
-/*   Updated: 2026/05/28 14:50:15 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/06/02 11:00:48 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int	malloc_error(void *param1, void *param2, void *param3)
+int	malloc_error(void *param)
 {
-	free(param1);
-	free(param2);
-	free(param3);
+	free(param);
 	fprintf(stderr, "Malloc ERROR.\n");
 	return (1);
 }

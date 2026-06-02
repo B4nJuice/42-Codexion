@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 10:30:00 by lgirard           #+#    #+#             */
-/*   Updated: 2026/06/01 13:15:40 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/06/02 12:14:04 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,39 +17,7 @@
 #include "utils.h"
 #include "monitoring.h"
 
-int init_threads(t_global *global)
-{
-	int	i;
-
-	i = 0;
-	pthread_mutex_init(&(global->stop_mutex), NULL);
-	pthread_mutex_init(&(global->print_mutex), NULL);
-	pthread_mutex_init(&(global->start_mutex), NULL);
-	pthread_cond_init(&global->cond, NULL);
-	while(i < global->params.dongle_number)
-	{
-		pthread_mutex_init(&(global->coders[i].mutex), NULL);
-		pthread_mutex_init(&(global->dongles[i].mutex), NULL);
-		pthread_create(&global->coders[i].thread, NULL, coder_routine, &global->coders[i]);
-		if (i%2)
-		{
-			global->dongles[i].coder1 = &(global->coders[i]);
-			global->dongles[i].coder2 = &(global->coders[(i + global->params.dongle_number - 1) % global->params.dongle_number]);
-		}
-		else
-		{
-			global->dongles[i].coder1 = &(global->coders[(i + global->params.dongle_number - 1) % global->params.dongle_number]);
-			global->dongles[i].coder2 = &(global->coders[i]);
-		}
-		if(!(global->coders[i].thread))
-			return thread_destroy(global, i);
-		i++;
-	}
-	start_monitor(global);
-	return (0);
-}
-
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	static t_global		global = {0};
 
@@ -59,8 +27,9 @@ int main(int ac, char **av)
 		return (1);
 	if (create_coders(&global))
 		return (1);
-	if(init_threads(&global))
+	if (init_threads(&global))
 		return (1);
+	start_monitor(&global);
 	thread_destroy(&global, global.params.dongle_number);
 	free(global.coders);
 	free(global.dongles);

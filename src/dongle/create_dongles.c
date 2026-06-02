@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 11:21:55 by lgirard           #+#    #+#             */
-/*   Updated: 2026/06/01 13:34:30 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/06/02 11:01:31 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ int	create_dongles(t_global *global)
 
 	global->dongles = malloc(global->params.dongle_number * sizeof(t_dongle));
 	if (!global->dongles)
-		return (malloc_error((void *)global->dongles,\
-			(void *)global->coders, NULL));
+		return (malloc_error((void *)global->dongles));
 	i = 0;
 	while (i < global->params.dongle_number)
 	{

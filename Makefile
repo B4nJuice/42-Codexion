@@ -2,12 +2,12 @@ NAME					= codexion
 
 CODEXION_CODER_DIR		= src/coder/
 CODEXION_CODER			= create_coders.c \
-						release_dongle.c \
 						take_dongles.c \
 						coder_routine.c
 
 CODEXION_DONGLE_DIR		= src/dongle/
 CODEXION_DONGLE			= create_dongles.c \
+						release_dongle.c \
 						get_dongle.c
 
 CODEXION_UTILS_DIR		= src/utils/
@@ -16,10 +16,11 @@ CODEXION_UTILS			= log.c \
 						fill_params.c \
 						is_running.c \
 						stop_running.c \
-						error.c
+						error.c \
+						init.c
 
 CODEXION_MONITORING_DIR	= src/monitoring/
-CODEXION_MONITORING		= monitoring_routine.c
+CODEXION_MONITORING		= monitor.c
 
 SRCS					= codexion.c \
 						$(addprefix $(CODEXION_CODER_DIR), $(CODEXION_CODER)) \
@@ -33,7 +34,7 @@ OBJS					= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
 INCLUDES_DIR			= src/includes
 	
 CC						= cc
-CFLAGS					= -Wall -Wextra -Werror -g3
+CFLAGS					= -Wall -Wextra -Werror
 IFLAGS					= -I $(INCLUDES_DIR)
 LFLAGS					= -pthread
 

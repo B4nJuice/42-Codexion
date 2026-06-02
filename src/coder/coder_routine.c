@@ -6,7 +6,7 @@
 /*   By: lgirard <lgirard@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 10:30:53 by lgirard           #+#    #+#             */
-/*   Updated: 2026/06/01 13:12:38 by lgirard          ###   ########lyon.fr   */
+/*   Updated: 2026/06/02 12:27:52 by lgirard          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 static void	ft_wait(t_global *global, int time_to_wait)
 {
-	int start;
+	int	start;
 
 	start = get_timestamp();
 	while (is_running(global) && get_timestamp() < start + time_to_wait)
@@ -26,12 +26,26 @@ static void	ft_wait(t_global *global, int time_to_wait)
 	}
 }
 
-void	wait_to_start(t_global *global)
+static void	wait_to_start(t_global *global)
 {
 	pthread_mutex_lock(&global->start_mutex);
 	while (global->start_status == 0)
 		pthread_cond_wait(&global->cond, &global->start_mutex);
 	pthread_mutex_unlock(&global->start_mutex);
+}
+
+static void	compile(t_coder *coder)
+{
+	take_dongles(coder);
+	pthread_mutex_lock(&(coder->mutex));
+	coder->last_compilation = get_timestamp();
+	pthread_mutex_unlock(&(coder->mutex));
+	ft_swap_dongle(coder->first_dongle, coder->global->params.scheduler);
+	ft_swap_dongle(coder->second_dongle, coder->global->params.scheduler);
+	codexion_log(coder, "is compiling");
+	ft_wait(coder->global, coder->global->params.compiling_time);
+	release_dongle(coder->first_dongle, 1);
+	release_dongle(coder->second_dongle, 1);
 }
 
 void	*coder_routine(void *arg)
@@ -42,16 +56,7 @@ void	*coder_routine(void *arg)
 	wait_to_start(coder->global);
 	while (is_running(coder->global))
 	{
-		take_dongles(coder);
-		pthread_mutex_lock(&(coder->mutex));
-		coder->last_compilation = get_timestamp();
-		pthread_mutex_unlock(&(coder->mutex));
-		ft_swap_dongle(coder->first_dongle, coder->global->params.scheduler);
-		ft_swap_dongle(coder->second_dongle, coder->global->params.scheduler);
-		codexion_log(coder, "is compiling");
-		ft_wait(coder->global, coder->global->params.compiling_time);
-		release_dongle(coder->first_dongle, 1);
-		release_dongle(coder->second_dongle, 1);
+		compile(coder);
 		pthread_mutex_lock(&(coder->mutex));
 		coder->compilation_number++;
 		if (coder->compilation_number >= coder->global->params.required_compile)

@@ -57,4 +57,7 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+norm:
+	norminette -R CheckForbiddenSourceHeader
+
+.PHONY: all clean fclean re norm

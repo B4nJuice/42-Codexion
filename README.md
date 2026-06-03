@@ -1,4 +1,4 @@
-# README.md
+*This project has been created as part of the 42 curriculum by lgirard*
 
 ## Description
 
@@ -20,7 +20,7 @@ The simulation is built around three main actors:
 
 - Coders: worker threads that alternate between compiling, debugging, and refactoring
 - Dongles: shared resources that must be acquired before a coder can compile
-- Monitor: a dedicated thread that starts the simulation and checks for burnout or completion
+- Monitor: a dedicated thread (the main one) that starts the simulation and checks for burnout or completion
 
 Each coder must acquire two dongles before compiling. After each compile, the coder may continue until it reaches the required number of compilations or until a burnout occurs.
 
